@@ -167,13 +167,16 @@ class Device(object):
     allowed_children = None
     
     @set_passed_properties(
-        property_names = {"device_properties": ["added_properties", "initialization_order", "finalization_order"]}
+        property_names = {"device_properties": ["added_properties", "initialization_order", "finalization_order"],
+        "connection_table_properties": ["worker_host"]}
+
         )
     def __init__(self,name,parent_device,connection, 
                  call_parents_add_device=True, 
                  initialization_order=1,
                  finalization_order=1,
-                 added_properties = {}, **kwargs):
+                 added_properties = {},
+                 worker_host="", **kwargs):
         # Verify that no invalid kwargs were passed and the set properties
         if len(kwargs) != 0:        
             raise LabscriptError('Invalid keyword arguments: %s.'%kwargs)
@@ -200,6 +203,7 @@ class Device(object):
         self.parent_device = parent_device
         self.connection = connection
         self.child_devices = []
+        self.worker_host = worker_host
         
         # self._properties may be instantiated already
         if not hasattr(self, "_properties"):
